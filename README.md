@@ -1,6 +1,6 @@
 <h1>ExpNo 4 : Implement A* search algorithm for a Graph</h1> 
-<h3>Name:       </h3>
-<h3>Register Number:           </h3>
+<h3>Name: Yuvaram S</h3>
+<h3>Register Number: 212224230315</h3>
 <H3>Aim:</H3>
 <p>To ImplementA * Search algorithm for a Graph using Python 3.</p>
 <H3>Algorithm:</H3>
@@ -51,6 +51,78 @@
 ``````
 
 <hr>
+
+## PROGRAM:
+```
+from collections import defaultdict
+
+H_dist = {}
+
+def a_star(start_node, stop_node):
+    open_set = {start_node}
+    closed_set = set()
+    g_cost = {start_node: 0}
+    parent = {start_node: start_node}
+
+    while open_set:
+        current = min(open_set, key=lambda x: g_cost[x] + heuristic(x))
+
+        if current == stop_node:
+            return construct_path(parent, start_node, stop_node)
+
+        open_set.remove(current)
+        closed_set.add(current)
+
+        for neighbor, weight in get_neighbors(current):
+            tentative_g = g_cost[current] + weight
+
+            if neighbor in closed_set:
+                continue
+
+            if neighbor not in open_set or tentative_g < g_cost.get(neighbor, float('inf')):
+                parent[neighbor] = current
+                g_cost[neighbor] = tentative_g
+                open_set.add(neighbor)
+
+    print("Path does not exist!")
+    return None
+
+def get_neighbors(node):
+    return Graph_nodes.get(node, [])
+
+def heuristic(node):
+    return H_dist.get(node, 0)
+
+def construct_path(parents, start, goal):
+    path = [goal]
+    while parents[goal] != goal:
+        goal = parents[goal]
+        path.append(goal)
+    path.reverse()
+    print("Path found:", path)
+    return path
+
+graph = defaultdict(list)
+n, e = map(int, input().split())
+
+for _ in range(e):
+    u, v, cost = input().split()
+    cost = int(cost)
+    graph[u].append((v, cost))
+    graph[v].append((u, cost))
+
+for _ in range(n):
+    node, h = input().split()
+    H_dist[node] = int(h)
+
+Graph_nodes = graph
+
+start = input().strip()
+goal = input().strip()
+
+a_star(start, goal)
+
+```
 <h2>Sample Graph I</h2>
 <hr>
 
@@ -86,6 +158,8 @@ I 1 <br>
 J 0 <br>
 <hr>
 <h2>Sample Output</h2>
+<img width="1164" height="766" alt="image" src="https://github.com/user-attachments/assets/d5d4c220-3ab6-4d11-a738-c93098baab57" />
+
 <hr>
 Path found: ['A', 'F', 'G', 'I', 'J']
 
@@ -93,8 +167,6 @@ Path found: ['A', 'F', 'G', 'I', 'J']
 <hr>
 <h2>Sample Graph II</h2>
 <hr>
-
-![image](https://github.com/natsaravanan/19AI405FUNDAMENTALSOFARTIFICIALINTELLIGENCE/assets/87870499/acbb09cb-ed39-48e5-a59b-2f8d61b978a3)
 
 
 <hr>
@@ -115,5 +187,7 @@ D 1 <br>
 G 0 <br>
 <hr>
 <h2>Sample Output</h2>
+<img width="1133" height="467" alt="image" src="https://github.com/user-attachments/assets/7f98f743-45ac-4b8b-a4c2-899c6e0f890f" />
+
 <hr>
 Path found: ['A', 'E', 'D', 'G']
